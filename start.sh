@@ -62,8 +62,16 @@ export PATH="$NODE_DIR/bin:$PATH"
 if [ ! -d "$ENGINE_DIR/node_modules/@gitlawb/openclaude" ]; then
     echo -e "${YELLOW}[~] Installing OpenClaude Engine...${RESET}"
     cd "$ENGINE_DIR"
-    npm install @gitlawb/openclaude@latest --no-audit --no-fund --loglevel=error --no-bin-links
-    echo -e "${GREEN}[OK] Engine installed!${RESET}"
+    npm install @gitlawb/openclaude@latest --no-audit --no-fund --no-bin-links
+    INSTALL_STATUS=$?
+    if [ $INSTALL_STATUS -eq 0 ] && [ -d "$ENGINE_DIR/node_modules/@gitlawb/openclaude" ]; then
+        echo -e "${GREEN}[OK] Engine installed!${RESET}"
+    else
+        echo -e "${RED}[ERROR] Engine installation failed! Exit code: $INSTALL_STATUS${RESET}"
+        echo -e "${DIM}This could be due to network issues, registry access, or package availability.${RESET}"
+        echo -e "${DIM}Check your internet connection or try running as administrator/sudo.${RESET}"
+        exit 1
+    fi
 fi
 
 # Portable data
